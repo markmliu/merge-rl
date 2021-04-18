@@ -1,0 +1,2 @@
+def collision_cost(Actor a, Actor b):
+    return 0.0

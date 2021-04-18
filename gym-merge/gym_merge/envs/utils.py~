@@ -1,0 +1,10 @@
+def getStartingS():
+  return -100.0
+
+def getStartingV():
+  return 20.0
+
+class MergeActor():
+  def __init__(self):
+    self.s = getStartingS()
+    self.v = getStartingV()
