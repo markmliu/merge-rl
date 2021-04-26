@@ -30,6 +30,7 @@ class MergeEnv(gym.Env):
     self.t = 0.0
     # ego s,v, object s,v
     self.state = get_state(self.ego_actor, self.merging_actor)
+    self.viewer = None
 
   def step(self, action):
     err_msg = "%r (%s) invalid" % (action, type(action))
@@ -50,7 +51,39 @@ class MergeEnv(gym.Env):
     return get_state(self.ego_actor, self.merging_actor)
 
   def render(self, mode='human'):
-    # think about how to render this
-    return
+    # mostly copied from cartpole-v1 example: https://github.com/openai/gym/blob/master/gym/envs/classic_control/cartpole.py
+    screen_width = 600
+    screen_height = 400
+
+    if self.viewer is None:
+      from gym.envs.classic_control import rendering
+      self.viewer = rendering.Viewer(screen_width, screen_height)
+      self.ego_circle = rendering.make_circle(10.0)
+      self.ego_circle.set_color(.5,.5,.8)
+      self.egotrans = rendering.Transform()
+      self.ego_circle.add_attr(self.egotrans)
+      self.viewer.add_geom(self.ego_circle)
+
+      self.merging_circle = rendering.make_circle(10.0)
+      self.merging_circle.set_color(.8,.8,.5)
+      self.mergingtrans = rendering.Transform()
+      self.merging_circle.add_attr(self.mergingtrans)
+      self.viewer.add_geom(self.merging_circle)
+
+      self.critical_line = rendering.make_polyline([(250.0,200.0), (350.0, 200.0)])
+      self.viewer.add_geom(self.critical_line)
+
+    if self.state is None:
+      return None
+
+    # ego road goes up from middle of the screen
+    self.egotrans.set_translation(250.0, self.ego_actor.s + 200.0)
+
+    self.mergingtrans.set_translation(350.0, self.merging_actor.s + 200.0)
+
+    return self.viewer.render(return_rgb_array=mode == 'rgb_array')
   def close(self):
+    if self.viewer:
+      self.viewer.close()
+      self.viewer = None
     return

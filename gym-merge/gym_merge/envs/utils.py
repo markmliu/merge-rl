@@ -24,6 +24,7 @@ def collision(s1, s2):
     return False
   return abs(s1 - s2) < CAR_LENGTH
 
+# TODO: do we need some cost to encourage progress?
 def get_reward(state, accel):
   accel_cost = -10.0 * abs(accel)
   collision_cost = -1000.0 if collision(state[0], state[2]) else 0
