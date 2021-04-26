@@ -6,3 +6,5 @@
 - openai gym baselines: https://github.com/openai/baselines
 - When building baselines: gym 0.15.7 has requirement cloudpickle~=1.2.0, but you'll have cloudpickle 1.6.0 which is incompatible.
 - Just downgraded cloudpickle to required package.
+
+- seem to be able to train with stable_baselines3: https://github.com/DLR-RM/stable-baselines3

@@ -32,6 +32,9 @@ class MergeEnv(gym.Env):
     self.state = get_state(self.ego_actor, self.merging_actor)
 
   def step(self, action):
+    err_msg = "%r (%s) invalid" % (action, type(action))
+    assert(self.action_space.contains(action), err_msg)
+
     accel = ACTION_LOOKUP[action]
     self.ego_actor.step(accel, DT)
     self.merging_actor.step(0.0, DT)
@@ -44,6 +47,8 @@ class MergeEnv(gym.Env):
 
   def reset(self):
     self.__init__()
+    return get_state(self.ego_actor, self.merging_actor)
+
   def render(self, mode='human'):
     # think about how to render this
     return
