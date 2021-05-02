@@ -29,7 +29,7 @@ class MergeEnv(gym.Env):
     self.merging_actor = merge_utils.Actor()
     self.t = 0.0
     # ego s,v, object s,v
-    self.state = get_state(self.ego_actor, self.merging_actor)
+    self.state = None
     self.viewer = None
 
   def step(self, action):
@@ -47,8 +47,11 @@ class MergeEnv(gym.Env):
     return self.state, reward, episode_over, {}
 
   def reset(self):
-    self.__init__()
-    return get_state(self.ego_actor, self.merging_actor)
+    self.ego_actor = merge_utils.Actor()
+    self.merging_actor = merge_utils.Actor()
+    self.t = 0.0
+    self.state = get_state(self.ego_actor, self.merging_actor)
+    return self.state
 
   def render(self, mode='human'):
     # mostly copied from cartpole-v1 example: https://github.com/openai/gym/blob/master/gym/envs/classic_control/cartpole.py
@@ -90,4 +93,3 @@ class MergeEnv(gym.Env):
     if self.viewer:
       self.viewer.close()
       self.viewer = None
-    return

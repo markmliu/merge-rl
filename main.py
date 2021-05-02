@@ -4,7 +4,7 @@ import time
 from stable_baselines3 import PPO, DQN
 
 env = gym.make('gym_merge:merge-v0')
-#env = gym.make("CartPole-v1")
+# env = gym.make("CartPole-v1")
 
 # TODO: do an eval of PPO vs DQN.
 # DQN seems to do a bit worse for the first case i tried, but need to vary initial states a bit more.
@@ -17,7 +17,7 @@ for i_episode in range(20):
     total_reward = 0
     for t in range(100):
         env.render()
-        time.sleep(0.1)
+        #time.sleep(0.1)
         print(observation)
         # action = env.action_space.sample()
         action, _states = model.predict(observation, deterministic=True)
