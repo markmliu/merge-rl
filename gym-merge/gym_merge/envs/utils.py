@@ -1,8 +1,12 @@
+import random as ra
+
 def getStartingS():
-  return -100.0
+  #return -100.0
+  return ra.uniform(-150.0, -50.0)
 
 def getStartingV():
-  return 20.0
+  # return 20.0
+  return ra.uniform(10.0,30.0)
 
 class Actor():
   def __init__(self):
@@ -25,12 +29,11 @@ def collision(s1, s2):
   return abs(s1 - s2) < CAR_LENGTH
 
 # TODO: do we need some cost to encourage progress?
-def get_reward(state, accel):
+def calculate_cost(state, accel):
   accel_cost = -10.0 * abs(accel)
-  collision_cost = -1000.0 if collision(state[0], state[2]) else 0
-  return accel_cost + collision_cost
+  collided = collision(state[0], state[2])
+  collision_cost = -1000.0 if collided else 0
+  return accel_cost + collision_cost, collided
 
-def episode_over(state, t):
-  if t > 15.0:
-    return True
-  return collision(state[0], state[2])
+def episode_over(t, collision):
+  return t > 15.0 or collision

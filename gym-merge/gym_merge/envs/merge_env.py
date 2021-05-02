@@ -42,8 +42,8 @@ class MergeEnv(gym.Env):
     self.t += DT
     self.state = get_state(self.ego_actor, self.merging_actor)
 
-    reward = merge_utils.get_reward(self.state, accel)
-    episode_over = merge_utils.episode_over(self.state, self.t)
+    reward, collision = merge_utils.calculate_cost(self.state, accel)
+    episode_over = merge_utils.episode_over(self.t, collision)
     return self.state, reward, episode_over, {}
 
   def reset(self):
@@ -79,7 +79,11 @@ class MergeEnv(gym.Env):
     # ego road goes up from middle of the screen
     self.egotrans.set_translation(250.0, self.ego_actor.s + 200.0)
 
-    self.mergingtrans.set_translation(350.0, self.merging_actor.s + 200.0)
+    # let's have the merging road come in from the right
+    if self.merging_actor.s < 0:
+      self.mergingtrans.set_translation(250.0 - self.merging_actor.s, 200.0)
+    else:
+      self.mergingtrans.set_translation(250.0, self.merging_actor.s + 200.0)
 
     return self.viewer.render(return_rgb_array=mode == 'rgb_array')
   def close(self):

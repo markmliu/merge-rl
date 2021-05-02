@@ -1,4 +1,5 @@
 import gym
+import time
 
 from stable_baselines3 import PPO, DQN
 
@@ -16,6 +17,7 @@ for i_episode in range(20):
     total_reward = 0
     for t in range(100):
         env.render()
+        time.sleep(0.1)
         print(observation)
         # action = env.action_space.sample()
         action, _states = model.predict(observation, deterministic=True)
